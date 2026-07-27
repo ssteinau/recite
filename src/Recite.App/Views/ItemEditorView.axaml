@@ -1,0 +1,178 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Recite.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="560" d:DesignHeight="700"
+             x:Class="Recite.App.Views.ItemEditorView"
+             x:Name="Root"
+             x:DataType="vm:ItemEditorViewModel">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Toolbar -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="16,12,16,8">
+            <TextBlock Grid.Column="0" Text="{Binding HeaderText}" Classes="h2" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Content="Delete" Command="{Binding DeleteCommand}"
+                    IsVisible="{Binding !IsNew}" Margin="0,0,6,0" />
+            <Button Grid.Column="2" Content="Save" Command="{Binding SaveCommand}"
+                    Classes="accent" Background="{DynamicResource SystemAccentColor}" Foreground="White" />
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" Padding="16,0,16,16">
+            <StackPanel Spacing="10">
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <StackPanel Grid.Column="0" Spacing="3">
+                        <TextBlock Text="Type" Classes="muted" FontSize="12" />
+                        <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding Type}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Spacing="3">
+                        <TextBlock Text="Year" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding Year}" />
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Spacing="3">
+                    <TextBlock Text="Title" Classes="muted" FontSize="12" />
+                    <TextBox Text="{Binding Title}" AcceptsReturn="False" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <StackPanel Grid.Column="0" Spacing="3">
+                        <TextBlock Text="Authors (one per line, “Family, Given”)" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding AuthorsText}" AcceptsReturn="True" MinHeight="70" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Spacing="3">
+                        <TextBlock Text="Editors (one per line)" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding EditorsText}" AcceptsReturn="True" MinHeight="70" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Spacing="3">
+                    <TextBlock Text="Journal / container title" Classes="muted" FontSize="12" />
+                    <TextBox Text="{Binding JournalName}" />
+                </StackPanel>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <StackPanel Grid.Column="0" Spacing="3">
+                        <TextBlock Text="Series" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding SeriesName}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Spacing="3">
+                        <TextBlock Text="Container reference (crossref)" Classes="muted" FontSize="12" />
+                        <ComboBox ItemsSource="{Binding Containers}" SelectedItem="{Binding ContainerParent}"
+                                  HorizontalAlignment="Stretch">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="vm:ContainerChoice">
+                                    <TextBlock Text="{Binding Label}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <StackPanel Grid.Column="0" Spacing="3">
+                        <TextBlock Text="Volume" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding Volume}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Spacing="3">
+                        <TextBlock Text="Issue / number" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding Issue}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Spacing="3">
+                        <TextBlock Text="Pages" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding Pages}" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="10">
+                    <StackPanel Grid.Column="0" Spacing="3">
+                        <TextBlock Text="Publisher" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding Publisher}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Spacing="3">
+                        <TextBlock Text="Place" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding Place}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Spacing="3">
+                        <TextBlock Text="Edition" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding Edition}" Width="70" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <StackPanel Grid.Column="0" Spacing="3">
+                        <TextBlock Text="DOI" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding Doi}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Spacing="3">
+                        <TextBlock Text="ISBN" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding Isbn}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Spacing="3">
+                        <TextBlock Text="URL" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding Url}" />
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Spacing="3">
+                    <TextBlock Text="Abstract" Classes="muted" FontSize="12" />
+                    <TextBox Text="{Binding Abstract}" AcceptsReturn="True" MinHeight="60" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <StackPanel Grid.Column="0" Spacing="3">
+                        <TextBlock Text="Tags (comma separated)" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding TagsText}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Spacing="3">
+                        <TextBlock Text="Citation key (blank = auto)" Classes="muted" FontSize="12" />
+                        <TextBox Text="{Binding CitationKeyOverride}" Watermark="{Binding GeneratedKey}" />
+                    </StackPanel>
+                </Grid>
+
+                <!-- Categories -->
+                <Border Classes="card">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Categories (facets)" Classes="h2" FontSize="13" />
+                        <ItemsControl ItemsSource="{Binding Categories}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:CategoryChoice">
+                                    <CheckBox Content="{Binding Label}" IsChecked="{Binding IsSelected}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Text="(No facets yet — add some in the Categories section.)"
+                                   Classes="muted" FontSize="11"
+                                   IsVisible="{Binding Categories.Count, Converter={x:Static vm:UiConverters.IsZero}}" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Attachments -->
+                <Border Classes="card">
+                    <StackPanel Spacing="6">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="Attachments" Classes="h2" FontSize="13" VerticalAlignment="Center" />
+                            <Button Grid.Column="1" Content="Attach file…" Command="{Binding AddAttachmentCommand}" />
+                        </Grid>
+                        <ItemsControl ItemsSource="{Binding Attachments}" x:CompileBindings="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,2">
+                                        <TextBlock Grid.Column="0" Text="{Binding RelativePath}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                        <Button Grid.Column="1" Content="Open" Margin="4,0"
+                                                Command="{Binding #Root.DataContext.OpenAttachmentCommand}" CommandParameter="{Binding}" />
+                                        <Button Grid.Column="2" Content="✕"
+                                                Command="{Binding #Root.DataContext.RemoveAttachmentCommand}" CommandParameter="{Binding}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

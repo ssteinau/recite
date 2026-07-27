@@ -1,0 +1,96 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Recite.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
+             x:Class="Recite.App.Views.DuplicatesView"
+             x:Name="Root"
+             x:DataType="vm:DuplicatesViewModel">
+    <Grid RowDefinitions="Auto,*" Margin="12">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+            <TextBlock Text="Reconcile duplicates" Classes="h1" VerticalAlignment="Center" />
+            <Button Content="Rescan" Command="{Binding ScanCommand}" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="16">
+                <!-- Item duplicates -->
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Candidate duplicate references" Classes="h2" />
+                    <TextBlock Text="No item duplicates found." Classes="muted" FontSize="12"
+                               IsVisible="{Binding ItemPairs.Count, Converter={x:Static vm:UiConverters.IsZero}}" />
+                    <ItemsControl ItemsSource="{Binding ItemPairs}" x:CompileBindings="False">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="card" Margin="0,0,0,8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Grid.Column="0" Spacing="3">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <Border Background="{DynamicResource SystemAccentColor}" CornerRadius="8" Padding="6,1">
+                                                    <TextBlock Text="{Binding Confidence}" Foreground="White" FontSize="11" />
+                                                </Border>
+                                                <TextBlock Text="{Binding Reason}" Classes="muted" FontSize="11" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding LeftText}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding RightText}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center" Margin="10,0,0,0">
+                                            <Button Content="Keep 1st" Command="{Binding #Root.DataContext.MergeItemsKeepLeftCommand}" CommandParameter="{Binding}" />
+                                            <Button Content="Keep 2nd" Command="{Binding #Root.DataContext.MergeItemsKeepRightCommand}" CommandParameter="{Binding}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!-- Person duplicates -->
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Candidate duplicate persons" Classes="h2" />
+                    <TextBlock Text="No person duplicates found." Classes="muted" FontSize="12"
+                               IsVisible="{Binding PersonPairs.Count, Converter={x:Static vm:UiConverters.IsZero}}" />
+                    <ItemsControl ItemsSource="{Binding PersonPairs}" x:CompileBindings="False">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="card" Margin="0,0,0,8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Grid.Column="0" Spacing="3">
+                                            <TextBlock Text="{Binding Reason}" Classes="muted" FontSize="11" />
+                                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                                <TextBlock Text="{Binding LeftText}" FontWeight="SemiBold" />
+                                                <TextBlock Text="↔" Classes="muted" />
+                                                <TextBlock Text="{Binding RightText}" FontWeight="SemiBold" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center" Margin="10,0,0,0">
+                                            <Button Content="Keep 1st" Command="{Binding #Root.DataContext.MergePersonsKeepLeftCommand}" CommandParameter="{Binding}" />
+                                            <Button Content="Keep 2nd" Command="{Binding #Root.DataContext.MergePersonsKeepRightCommand}" CommandParameter="{Binding}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!-- Merge history -->
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Merge history" Classes="h2" />
+                    <ItemsControl ItemsSource="{Binding MergeHistory}" x:CompileBindings="False">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto" Margin="0,2">
+                                    <TextBlock Grid.Column="0" Text="{Binding Text}" VerticalAlignment="Center" FontSize="12" />
+                                    <Button Grid.Column="1" Content="Revert" IsEnabled="{Binding CanRevert}"
+                                            Command="{Binding #Root.DataContext.RevertMergeCommand}" CommandParameter="{Binding}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

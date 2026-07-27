@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Recite.App.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="Recite.App.Views.PersonsView"
+             x:DataType="vm:PersonsViewModel">
+    <Grid ColumnDefinitions="*,320" Margin="12">
+        <Grid Grid.Column="0" RowDefinitions="Auto,*" Margin="0,0,12,0">
+            <TextBox Grid.Row="0" Watermark="Filter persons…" Text="{Binding Filter}" Margin="0,0,0,8" />
+            <ListBox Grid.Row="1" ItemsSource="{Binding Persons}" SelectedItem="{Binding Selected}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PersonRow">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="{Binding Name}" />
+                            <TextBlock Grid.Column="1" Text="{Binding CountLabel}" Classes="muted" FontSize="11" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
+        <Border Grid.Column="1" Classes="card" VerticalAlignment="Top">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Edit person" Classes="h2" />
+                <TextBlock Text="Family" Classes="muted" FontSize="12" />
+                <TextBox Text="{Binding Family}" />
+                <TextBlock Text="Given" Classes="muted" FontSize="12" />
+                <TextBox Text="{Binding Given}" />
+                <TextBlock Text="Suffix" Classes="muted" FontSize="12" />
+                <TextBox Text="{Binding Suffix}" />
+                <TextBlock Text="Literal (institution)" Classes="muted" FontSize="12" />
+                <TextBox Text="{Binding Literal}" />
+                <Button Content="Save" Command="{Binding SaveCommand}" HorizontalAlignment="Right"
+                        Background="{DynamicResource SystemAccentColor}" Foreground="White" />
+                <TextBlock Text="Merge duplicate persons in the Duplicates section." Classes="muted" FontSize="11" TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

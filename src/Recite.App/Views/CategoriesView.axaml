@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Recite.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+             x:Class="Recite.App.Views.CategoriesView"
+             x:DataType="vm:CategoriesViewModel">
+    <Grid ColumnDefinitions="*,320" Margin="12">
+        <TreeView Grid.Column="0" ItemsSource="{Binding Facets}" SelectedItem="{Binding Selected}" Margin="0,0,12,0">
+            <TreeView.ItemTemplate>
+                <TreeDataTemplate ItemsSource="{Binding Children}" x:DataType="vm:CategoryNode">
+                    <TextBlock Text="{Binding Name}" Padding="2,4" FontWeight="{Binding IsFacet, Converter={x:Static vm:UiConverters.BoolToBold}}" />
+                </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+
+        <Border Grid.Column="1" Classes="card" VerticalAlignment="Top">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Organize facets" Classes="h2" />
+                <TextBlock Text="A facet is an independent, orthogonal category tree (Approach, Content Kind…). An item can be filed under many at once."
+                           Classes="muted" FontSize="11" TextWrapping="Wrap" />
+                <TextBox Text="{Binding NewName}" Watermark="Name…" />
+                <Button Content="Add facet (top level)" Command="{Binding AddFacetCommand}" HorizontalAlignment="Stretch" />
+                <Button Content="Add category under selection" Command="{Binding AddCategoryCommand}" HorizontalAlignment="Stretch" />
+                <Button Content="Rename selection" Command="{Binding RenameCommand}" HorizontalAlignment="Stretch" />
+                <Button Content="Delete selection" Command="{Binding DeleteCommand}" HorizontalAlignment="Stretch" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

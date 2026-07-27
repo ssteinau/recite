@@ -1,0 +1,154 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Recite.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="720"
+             x:Class="Recite.App.Views.ProjectsView"
+             x:Name="Root"
+             x:DataType="vm:ProjectsViewModel">
+    <Grid ColumnDefinitions="240,*" Margin="12">
+        <!-- Projects list -->
+        <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto" Margin="0,0,12,0">
+            <TextBlock Grid.Row="0" Text="Projects" Classes="h2" Margin="0,0,0,6" />
+            <ListBox Grid.Row="1" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ProjectRow">
+                        <TextBlock Text="{Binding Name}" Padding="2,6" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Row="2" Spacing="6" Margin="0,8,0,0">
+                <TextBox Text="{Binding NewProjectName}" Watermark="New project name…" />
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                    <Button Grid.Column="0" Content="Create" Command="{Binding CreateProjectCommand}" HorizontalAlignment="Stretch" />
+                    <Button Grid.Column="1" Content="Delete" Command="{Binding DeleteProjectCommand}" HorizontalAlignment="Stretch" />
+                </Grid>
+            </StackPanel>
+        </Grid>
+
+        <!-- Project detail -->
+        <ScrollViewer Grid.Column="1" IsVisible="{Binding HasSelection}">
+            <StackPanel Spacing="14">
+
+                <!-- Key scheme -->
+                <Border Classes="card">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Citation-key scheme" Classes="h2" FontSize="13" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBox Grid.Column="0" Text="{Binding KeyScheme}" Margin="0,0,6,0" FontFamily="monospace" />
+                            <Button Grid.Column="1" Content="Save" Command="{Binding SaveKeySchemeCommand}" />
+                        </Grid>
+                        <TextBlock Text="Placeholders: [auth] [authors] [year] [shorttitle] [veryshorttitle]. Collisions get a/b/c."
+                                   Classes="muted" FontSize="11" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Members -->
+                <Border Classes="card">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Members (curated set — independent of categories)" Classes="h2" FontSize="13" />
+                        <Grid ColumnDefinitions="*,320">
+                            <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
+                                <ListBox ItemsSource="{Binding Members}" SelectedItem="{Binding SelectedMember}" MinHeight="140" MaxHeight="260">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:ItemRow">
+                                            <StackPanel Margin="2">
+                                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Text="{Binding Authors}" FontSize="11" Classes="muted" TextTrimming="CharacterEllipsis" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Button Content="Remove selected" Command="{Binding RemoveMemberCommand}" HorizontalAlignment="Left" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="4">
+                                <TextBox Text="{Binding MemberSearch}" Watermark="Search library to add…" />
+                                <ListBox ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedSearchResult}" MaxHeight="180">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:ItemRow">
+                                            <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Button Content="Add to project →" Command="{Binding AddMemberCommand}" HorizontalAlignment="Right" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Projections -->
+                <Border Classes="card">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Projections (output only — never touch the database)" Classes="h2" FontSize="13" />
+
+                        <TextBlock Text="Journal abbreviations" FontWeight="SemiBold" FontSize="12" />
+                        <ItemsControl ItemsSource="{Binding JournalAbbrevs}" x:CompileBindings="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="6" Margin="0,2">
+                                        <TextBox Grid.Column="0" Text="{Binding Match}" Watermark="Journal name" />
+                                        <TextBox Grid.Column="1" Text="{Binding Abbreviation}" Watermark="Abbreviation" />
+                                        <Button Grid.Column="2" Content="✕" Command="{Binding #Root.DataContext.RemoveJournalAbbrevCommand}" CommandParameter="{Binding}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Content="+ Add journal abbreviation" Command="{Binding AddJournalAbbrevCommand}" HorizontalAlignment="Left" />
+
+                        <TextBlock Text="Series abbreviations" FontWeight="SemiBold" FontSize="12" Margin="0,6,0,0" />
+                        <ItemsControl ItemsSource="{Binding SeriesAbbrevs}" x:CompileBindings="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="6" Margin="0,2">
+                                        <TextBox Grid.Column="0" Text="{Binding Match}" Watermark="Series name" />
+                                        <TextBox Grid.Column="1" Text="{Binding Abbreviation}" Watermark="Abbreviation" />
+                                        <Button Grid.Column="2" Content="✕" Command="{Binding #Root.DataContext.RemoveSeriesAbbrevCommand}" CommandParameter="{Binding}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Content="+ Add series abbreviation" Command="{Binding AddSeriesAbbrevCommand}" HorizontalAlignment="Left" />
+
+                        <TextBlock Text="String substitutions" FontWeight="SemiBold" FontSize="12" Margin="0,6,0,0" />
+                        <ItemsControl ItemsSource="{Binding Substitutions}" x:CompileBindings="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="90,*,*,Auto,Auto" ColumnSpacing="6" Margin="0,2">
+                                        <TextBox Grid.Column="0" Text="{Binding Field}" Watermark="field/*" />
+                                        <TextBox Grid.Column="1" Text="{Binding Pattern}" Watermark="find" />
+                                        <TextBox Grid.Column="2" Text="{Binding Replacement}" Watermark="replace" />
+                                        <CheckBox Grid.Column="3" Content="regex" IsChecked="{Binding IsRegex}" VerticalAlignment="Center" />
+                                        <Button Grid.Column="4" Content="✕" Command="{Binding #Root.DataContext.RemoveSubstitutionCommand}" CommandParameter="{Binding}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Content="+ Add substitution" Command="{Binding AddSubstitutionCommand}" HorizontalAlignment="Left" />
+
+                        <Button Content="Save projections" Command="{Binding SaveProjectionsCommand}" HorizontalAlignment="Right"
+                                Background="{DynamicResource SystemAccentColor}" Foreground="White" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Export -->
+                <Border Classes="card">
+                    <StackPanel Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto,Auto">
+                            <TextBlock Grid.Column="0" Text="Export bibliography (.bib)" Classes="h2" FontSize="13" VerticalAlignment="Center" />
+                            <Button Grid.Column="1" Content="Preview" Command="{Binding PreviewExportCommand}" Margin="0,0,6,0" />
+                            <Button Grid.Column="2" Content="Export…" Command="{Binding ExportBibCommand}"
+                                    Background="{DynamicResource SystemAccentColor}" Foreground="White" />
+                        </Grid>
+                        <TextBox Text="{Binding ExportPreview}" IsReadOnly="True" AcceptsReturn="True"
+                                 FontFamily="monospace" FontSize="11" MinHeight="160" MaxHeight="320"
+                                 VerticalContentAlignment="Top" TextWrapping="NoWrap"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

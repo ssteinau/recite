@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Recite.App/Recite.App.csproj" />
+    <Project Path="src/Recite.Core/Recite.Core.csproj" />
+    <Project Path="src/Recite.Data/Recite.Data.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Recite.Tests/Recite.Tests.csproj" />
+  </Folder>
+</Solution>

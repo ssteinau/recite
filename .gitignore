@@ -1,0 +1,20 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+
+# Design-time / local databases
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+recite-design.sqlite
+
+# IDE / OS
+.vs/
+.idea/
+*.user
+.DS_Store
+
+# Keep the Citavi corpus binaries out of source control
+PhlowsRelatedWorkCollection/*.ctv6

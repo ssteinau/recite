@@ -1,0 +1,68 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Recite.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+             x:Class="Recite.App.Views.VenuesView"
+             x:DataType="vm:VenuesViewModel">
+    <Grid ColumnDefinitions="*,320" Margin="12">
+        <TabControl Grid.Column="0" Margin="0,0,12,0">
+            <TabItem Header="Journals">
+                <ListBox ItemsSource="{Binding Journals}" SelectedItem="{Binding SelectedJournal}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:JournalRow">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="{Binding Name}" />
+                                    <TextBlock Text="{Binding Abbreviation}" Classes="muted" FontSize="11" />
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="{Binding Count, StringFormat='{}{0} refs'}" Classes="muted" FontSize="11" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Series">
+                <ListBox ItemsSource="{Binding Series}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:SeriesRow">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Name}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Count, StringFormat='{}{0} refs'}" Classes="muted" FontSize="11" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Tags">
+                <ListBox ItemsSource="{Binding Tags}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:TagRow">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="{Binding Name}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Count, StringFormat='{}{0} refs'}" Classes="muted" FontSize="11" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+        </TabControl>
+
+        <Border Grid.Column="1" Classes="card" VerticalAlignment="Top">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Edit journal" Classes="h2" />
+                <TextBlock Text="Name" Classes="muted" FontSize="12" />
+                <TextBox Text="{Binding EditName}" />
+                <TextBlock Text="Abbreviation (default output short form)" Classes="muted" FontSize="12" />
+                <TextBox Text="{Binding EditAbbreviation}" />
+                <TextBlock Text="ISSN" Classes="muted" FontSize="12" />
+                <TextBox Text="{Binding EditIssn}" />
+                <Button Content="Save journal" Command="{Binding SaveJournalCommand}" HorizontalAlignment="Right"
+                        Background="{DynamicResource SystemAccentColor}" Foreground="White" />
+                <TextBlock Text="Project-specific abbreviations are set per project as projections; this is the library default."
+                           Classes="muted" FontSize="11" TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
